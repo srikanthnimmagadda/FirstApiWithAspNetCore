@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using CityInfo.API.Services;
 using CityInfo.API.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,8 +8,22 @@ namespace CityInfo.API.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class CitiesInfoController : ControllerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ICityInfoRepository _repository;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="repository"></param>
+        public CitiesInfoController(ICityInfoRepository repository)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -15,6 +31,7 @@ namespace CityInfo.API.Controller
         [HttpGet]
         public IActionResult GetCities()
         {
+            var cities = _repository.GetCities();
             return Ok(CitiesDataStore.Default.Cities);
         }
 
