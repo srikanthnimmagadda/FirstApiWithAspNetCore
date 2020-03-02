@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using CityInfo.API.Dto;
 using CityInfo.API.Services;
 using CityInfo.API.Utility;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +21,16 @@ namespace CityInfo.API.Controller
         /// <summary>
         /// 
         /// </summary>
+        private readonly IMapper _mapper;
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="repository"></param>
-        public CitiesInfoController(ICityInfoRepository repository)
+        public CitiesInfoController(ICityInfoRepository repository, IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>
@@ -31,25 +40,33 @@ namespace CityInfo.API.Controller
         [HttpGet]
         public IActionResult GetCities()
         {
-            var cities = _repository.GetCities();
-            return Ok(CitiesDataStore.Default.Cities);
+            IEnumerable<Data.Entities.City> cities = _repository.GetCities();
+            IEnumerable<CityBase> results = _mapper.Map<IEnumerable<CityBase>>(cities);
+            return Ok(results);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="hasToIncludePointOfInterest"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public IActionResult GetCity(int id)
+        public IActionResult GetCity(int id, bool hasToIncludePointOfInterest = false)
         {
-            var cityToReturn = CitiesDataStore.Default.Cities.FirstOrDefault(c => c.Id == id);
+            var city = _repository.GetCity(id, hasToIncludePointOfInterest);
 
-            if(cityToReturn == null)
+            if (city == null)
             {
                 return NotFound();
             }
-            return Ok(cityToReturn);
+
+            if(hasToIncludePointOfInterest)
+            {
+                return Ok(_mapper.Map<City>(city));
+            }
+
+            return Ok(_mapper.Map<CityBase>(city));
         }
     }
 }

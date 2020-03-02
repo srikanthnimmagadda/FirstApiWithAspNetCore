@@ -27,7 +27,7 @@ namespace CityInfo.API.Utility
                     Id = 1,
                     Name = "New York",
                     Description = "New York City is the most populous city in the United States. New York is also the most densely populated major city in the United States.",
-                    PointsOfInterest = new List<PointOfInterest>()
+                    PointOfInterest = new List<PointOfInterest>()
                      {
                          new PointOfInterest() {
                              Id = 1,
@@ -44,7 +44,7 @@ namespace CityInfo.API.Utility
                     Id = 2,
                     Name = "California",
                     Description = "California City is known for having the third-largest land area of any city in the state of California.",
-                    PointsOfInterest = new List<PointOfInterest>()
+                    PointOfInterest = new List<PointOfInterest>()
                      {
                          new PointOfInterest() {
                              Id = 3,
@@ -61,7 +61,7 @@ namespace CityInfo.API.Utility
                     Id = 3,
                     Name = "Paris",
                     Description = "Paris City is the capital and most populous city of France. Paris has been one of Europe's major centres of finance, diplomacy, commerce, fashion, science and the arts.",
-                    PointsOfInterest = new List<PointOfInterest>()
+                    PointOfInterest = new List<PointOfInterest>()
                      {
                          new PointOfInterest() {
                              Id = 5,

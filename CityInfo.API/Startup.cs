@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using CityInfo.API.Data;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
+using SqlAlias;
 
 namespace CityInfo.API
 {
@@ -42,7 +44,7 @@ namespace CityInfo.API
             {
                 options.ReturnHttpNotAcceptable = true;
             })
-                .AddXmlDataContractSerializerFormatters()
+                //.AddXmlDataContractSerializerFormatters()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -59,10 +61,11 @@ namespace CityInfo.API
             services.AddDbContext<CityInfoDbContext>(options =>
             {
                 string connectionString = _configuration["connectionStrings:cityInfoConnectionString"];
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(Aliases.Map(connectionString));
             });
 
             services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         /// <summary>
